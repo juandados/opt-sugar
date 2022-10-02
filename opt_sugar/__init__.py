@@ -3,7 +3,7 @@ from sklearn.base import MultiOutputMixin
 from sklearn.utils.validation import check_is_fitted
 from abc import abstractmethod
 import gurobipy as gp
-from .objective import Objective, ObjectivePart, BaseObjective
+from objective import Objective, ObjectivePart, BaseObjective
 from copy import copy
 import json
 
