@@ -27,7 +27,5 @@ opt-sugar requires:
 User installation
 ~~~~~~~~~~~~~~~~~
 
-If you already have a working installation of numpy and scipy,
-the easiest way to install scikit-learn is using ``pip``::
-
-    pip install -U scikit-learn
+If you already have a working installation all the dependencies,
+the easiest way to install opt-sugar is using ..
