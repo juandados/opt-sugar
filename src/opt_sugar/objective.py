@@ -26,7 +26,8 @@ class ObjectivePart:
     def __repr__(self):
         return json.dumps(
             {k: v if is_jsonable(v) else str(v) for k, v in self.__dict__.items()},
-            indent=2, sort_keys=True
+            indent=2,
+            sort_keys=True,
         )
 
 
@@ -37,7 +38,8 @@ class BaseObjective:
 
     def build(self):
         objective_parts_sum = sum(
-            (objective_part for objective_part in self._objective_parts), ObjectivePart(weight=1, expr=0)
+            (objective_part for objective_part in self._objective_parts),
+            ObjectivePart(weight=1, expr=0),
         )
         return objective_parts_sum._expr
 

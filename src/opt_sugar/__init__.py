@@ -3,7 +3,7 @@ from sklearn.base import MultiOutputMixin
 from sklearn.utils.validation import check_is_fitted
 from abc import abstractmethod
 import gurobipy as gp
-from objective import Objective, ObjectivePart, BaseObjective
+from .objective import Objective, ObjectivePart, BaseObjective
 from copy import copy
 import json
 
@@ -17,15 +17,21 @@ class ModelBuilder:
 
     @abstractmethod
     def build_variables(self, base_model: gp.Model) -> None:
-        raise NotImplementedError(f"{type(self).__name__} should implement build_variables!")
+        raise NotImplementedError(
+            f"{type(self).__name__} should implement build_variables!"
+        )
 
     @abstractmethod
     def build_constraints(self, base_model: gp.Model) -> None:
-        raise NotImplementedError(f"{type(self).__name__} should implement build_constraints!")
+        raise NotImplementedError(
+            f"{type(self).__name__} should implement build_constraints!"
+        )
 
     @abstractmethod
     def build_objective(self, base_model) -> Objective:
-        raise NotImplementedError(f"{type(self).__name__} should implement build_objective!")
+        raise NotImplementedError(
+            f"{type(self).__name__} should implement build_objective!"
+        )
 
     def build(self):
         base_model = gp.Model("my_model")
@@ -82,9 +88,11 @@ class OptModel:  # (MultiOutputMixin, RegressorMixin, BaseEstimator):
             del model
         return self
 
-    def predict(self):
-        """Returns the variable values"""
-        check_is_fitted(self)
+    def predict(self, data, callback=None):
+        """Fits estimator if not fitted or self.data differs from data and returns the variable values"""
+        fitted = [v for v in vars(self) if v.endswith("_") and not v.startswith("__")]
+        if not fitted or self.data != data:
+            self.fit(data, callback=callback)
         return self.vars_
 
     def score(self):
