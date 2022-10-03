@@ -28,4 +28,6 @@ User installation
 ~~~~~~~~~~~~~~~~~
 
 If you already have a working installation all the dependencies,
-the easiest way to install opt-sugar is using ..
+the easiest way to install opt-sugar is using ``pip``::
+
+    pip install -U opt-sugar

@@ -1,9 +1,12 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.rst").read_text()
 
 setup(
     name="opt_sugar",
-    version="0.0.2",
+    version="0.0.4",
     author="Juan Chacon",
     author_email="juandados@gmail.com",
     packages=find_packages("src"),
@@ -15,4 +18,6 @@ setup(
         "gurobipy",
         "scikit-learn",
     ],
+    long_description=long_description,
+    long_description_content_type='text/x-rst'
 )
