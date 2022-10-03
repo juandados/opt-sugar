@@ -85,3 +85,11 @@ class TestOptModel:
         # color count is 2
         color_count = opt_model.objective_value_ + 1
         assert color_count == 2
+
+    def test_predict(self, five_vertex_data):
+        opt_model = OptModel(model_builder=ColoringModelBuilder)
+        vars_ = opt_model.predict(five_vertex_data)
+        assert isinstance(vars_, dict)
+        # color count is 2
+        color_count = opt_model.objective_value_ + 1
+        assert color_count == 2
