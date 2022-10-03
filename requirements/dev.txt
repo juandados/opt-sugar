@@ -2,3 +2,4 @@
 black==22.8.0
 Sphinx==5.2.3
 twine==4.0.1
+pytest==7.1.3
