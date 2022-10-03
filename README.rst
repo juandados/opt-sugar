@@ -6,8 +6,8 @@
 .. |ScikitLearn| replace:: 1.1.2
 
 **opt-sugar**
-is a Python package meant to make the optimization operation (OptOps) tasks easier by providing the building block need
-to use mlflow for experimentation in the field of mathematical optimization.
+is a Python package meant to make the optimization operation (OptOps) tasks easier by providing the building blocks needed
+to use mlflow for mathematical optimization experimentation.
 
 The project was started in oct 2022 by Juan Chacon.
 
