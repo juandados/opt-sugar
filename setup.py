@@ -9,7 +9,7 @@ setup(
     packages=find_packages("opt_sugar"),
     package_dir={"": "opt_sugar"},
     url="https://github.com/juandados/opt-sugar",
-    keywords="optimization operations",
+    keywords="optimization operations mathematical programming",
     install_requires=[
         "numpy",
         "gurobipy",
