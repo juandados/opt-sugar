@@ -3,25 +3,24 @@
 Experiment Tracking: Coloring
 =============================
 
-This example demostrates how to use opt-sugar in combination with mlflow for single objective optimization experiment
-tracking
+This example demostrates how to use opt-sugar in combination with mlflow
+for single objective optimization experiment tracking
 """
 import datetime
-import mlflow
-from mlflow.exceptions import MlflowException
 from urllib.parse import urlparse
-
-# This could be removed after generating the package
-from opt_sugar import OptModel, ModelBuilder, model_builder_factory
-from opt_sugar.objective import Objective, ObjectivePart, BaseObjective
 from itertools import product
 from collections import defaultdict
-
+from random import random
 import logging
-logging.getLogger("mlflow").setLevel(logging.CRITICAL)
 
 import gurobipy as gp
-from random import random
+import mlflow
+from mlflow.exceptions import MlflowException
+
+from opt_sugar import OptModel, ModelBuilder
+from opt_sugar.objective import Objective, ObjectivePart, BaseObjective
+
+logging.getLogger("mlflow").setLevel(logging.CRITICAL)
 
 
 class ColoringModelBuilder(ModelBuilder):
@@ -34,26 +33,32 @@ class ColoringModelBuilder(ModelBuilder):
             degrees[v2] += 1
         self.degree = max(degrees.items(), key=lambda x: x[1])[1]
         color_keys = list(product(self.data["vertex"], range(self.degree)))
-        color = base_model.addVars(color_keys, vtype='B', name="color")
+        color = base_model.addVars(color_keys, vtype="B", name="color")
         max_color = base_model.addVar(lb=0, ub=self.degree, vtype="C", name="max_color")
         self.variables = {"color": color, "max_color": max_color}
 
     def build_constraints(self, base_model):
         color = self.variables["color"]
         for v1, c in color:
-            # if color[v1, c] == 1 -> color[v2, c] == 0 for all v2 such that (v1, v2) or  belongs to E
+            # if color[v1, c] == 1 -> color[v2, c] == 0 for all v2 such that (v1, v2) or
+            # belongs to E
             for v2 in self.data["vertex"]:
                 if (v2, v1) in self.data["edges"] or (v1, v2) in self.data["edges"]:
-                    base_model.addConstr(color[v2, c] <= 1 - color[v1, c], name=f"color_{c}_{v1}_{v2}")
+                    base_model.addConstr(
+                        color[v2, c] <= 1 - color[v1, c], name=f"color_{c}_{v1}_{v2}"
+                    )
 
         for v in self.data["vertex"]:
             base_model.addConstr(
-                gp.quicksum(color[v, c] for c in range(self.degree)) == 1, name=f"every_node_has_color_{v}"
+                gp.quicksum(color[v, c] for c in range(self.degree)) == 1,
+                name=f"every_node_has_color_{v}",
             )
 
         max_color = self.variables["max_color"]
         for v, c in color:
-            base_model.addConstr(c * color[v, c] <= max_color, name=f"max_color_{v}_{c}")
+            base_model.addConstr(
+                c * color[v, c] <= max_color, name=f"max_color_{v}_{c}"
+            )
 
     def build_objective(self, base_model):
         max_color = self.variables["max_color"]
@@ -83,7 +88,11 @@ except MlflowException:
 
 with mlflow.start_run(experiment_id=experiment_id):
     vertex = set(range(vertex_count))
-    edges = set((v1, v2) for v1, v2 in product(vertex, vertex) if random() <= edge_probability and v1 > v2)
+    edges = set(
+        (v1, v2)
+        for v1, v2 in product(vertex, vertex)
+        if random() <= edge_probability and v1 > v2
+    )
     edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
     data = {"vertex": vertex, "edges": edges}
     print("=" * 5, "Data", "=" * 5)
@@ -106,8 +115,10 @@ with mlflow.start_run(experiment_id=experiment_id):
         # There are other ways to use the Model Registry, which depends on the use case,
         # please refer to the doc for more information:
         # https://mlflow.org/docs/latest/model-registry.html#api-workflow
-        mlflow.sklearn.log_model(opt_model, "opt_model", registered_model_name="OptModel")
+        mlflow.sklearn.log_model(
+            opt_model, "opt_model", registered_model_name="OptModel"
+        )
     else:
         mlflow.sklearn.log_model(opt_model, "opt_model")
 
-        #exec(build_model_source)
+        # exec(build_model_source)
