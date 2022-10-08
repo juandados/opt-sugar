@@ -39,6 +39,12 @@ from numpy import linspace
 # TODO: reformat this example similar to
 #  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
 
+# %%
+# A Colored Graph Helper Function
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# The following function is really handy to visualize our colored graphs.
+
 
 def build_graph(solution):
     cmap = plt.get_cmap("gist_rainbow")
@@ -52,6 +58,12 @@ def build_graph(solution):
     g.add_edges(edges)
     g.set_options("""{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}""")
     return g
+
+# %%
+# The Optimizations Model Builder
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# The following class is the builder for the coloring problem.
 
 
 class ColoringModelBuilder(ModelBuilder):
@@ -106,7 +118,15 @@ def fit_callback(model):
     }
     return fit_callback_data
 
-# 1. Generate random data
+
+# %%
+# Tracking an Optimization Experiment
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Add description here.
+
+# Generate random data:
+
 node_count = 5
 edge_probability = 0.5
 
@@ -119,7 +139,6 @@ edges = set(
 edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
 data = {"nodes": nodes, "edges": edges}
 
-# 2. Track optimization experiment
 logging.getLogger("mlflow").setLevel(logging.CRITICAL)  # Can be set DEBUG
 
 try:
@@ -151,7 +170,11 @@ with mlflow.start_run(experiment_id=experiment_id):
     else:
         model_info = mlflow.sklearn.log_model(opt_model, "opt_model")
 
-# 3. Load the registered model and make predictions
+# %%
+# Load the Registered Model and Optimize with new Data
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Add description here.
 
 logged_model_uri = model_info.model_uri
 print(f"logged_model_uri: {logged_model_uri}")
@@ -173,3 +196,7 @@ print(f"Optimized Coloring: {solution}")
 
 g = build_graph(solution)
 g.show(name="vis.html")
+
+# %%
+# .. image:: https://mybinder.org/badge_logo.svg
+#  :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_coloring.ipynb
