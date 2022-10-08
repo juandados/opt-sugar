@@ -19,8 +19,37 @@ from mlflow.exceptions import MlflowException
 
 from opt_sugar import OptModel, ModelBuilder
 from opt_sugar.objective import Objective, ObjectivePart, BaseObjective
+import opt_sugar.opt_flow as opt_flow
 
-logging.getLogger("mlflow").setLevel(logging.CRITICAL)
+from pyvis.network import Network
+import matplotlib.pyplot as plt
+from matplotlib.colors import rgb2hex
+from numpy import linspace
+
+# When running locally
+#import sys
+#sys.path.append('~/opt/opt-sugar')
+#from src.opt_sugar import OptModel, ModelBuilder
+#from src.opt_sugar.objective import Objective, ObjectivePart, BaseObjective
+#import src.opt_sugar.opt_flow as opt_flow
+
+# TODO: reformat this example similar to
+#  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
+
+
+def show_graph(solution):
+    cmap = plt.get_cmap("gist_rainbow")
+    color_count = int(solution["max_color"] + 1)
+    color_map = {node: color_label for node, color_label in product(nodes, range(color_count)) if
+                 solution[f'color[{node},{color_label}]'] == 1}
+    rgb_colors = {c: cmap(x) for c, x in enumerate(linspace(0, 1 - 1 / color_count, color_count))}
+    g = Network()
+    g.add_nodes(nodes=list(color_map.keys()),
+                color=[rgb2hex(rgb_colors[color_label]) for color_label in color_map.values()])
+    g.add_edges(edges)
+    g.set_options("""{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}""")
+    filename = "vis.html"
+    g.show(name=filename)
 
 
 class ColoringModelBuilder(ModelBuilder):
@@ -32,7 +61,7 @@ class ColoringModelBuilder(ModelBuilder):
             degrees[v1] += 1
             degrees[v2] += 1
         self.degree = max(degrees.items(), key=lambda x: x[1])[1]
-        color_keys = list(product(self.data["vertex"], range(self.degree)))
+        color_keys = list(product(self.data["nodes"], range(self.degree)))
         color = base_model.addVars(color_keys, vtype="B", name="color")
         max_color = base_model.addVar(lb=0, ub=self.degree, vtype="C", name="max_color")
         self.variables = {"color": color, "max_color": max_color}
@@ -42,13 +71,13 @@ class ColoringModelBuilder(ModelBuilder):
         for v1, c in color:
             # if color[v1, c] == 1 -> color[v2, c] == 0 for all v2 such that (v1, v2) or
             # belongs to E
-            for v2 in self.data["vertex"]:
+            for v2 in self.data["nodes"]:
                 if (v2, v1) in self.data["edges"] or (v1, v2) in self.data["edges"]:
                     base_model.addConstr(
                         color[v2, c] <= 1 - color[v1, c], name=f"color_{c}_{v1}_{v2}"
                     )
 
-        for v in self.data["vertex"]:
+        for v in self.data["nodes"]:
             base_model.addConstr(
                 gp.quicksum(color[v, c] for c in range(self.degree)) == 1,
                 name=f"every_node_has_color_{v}",
@@ -75,9 +104,21 @@ def fit_callback(model):
     }
     return fit_callback_data
 
-
-vertex_count = 5
+# 1. Generate random data
+node_count = 5
 edge_probability = 0.5
+
+nodes = set(range(node_count))
+edges = set(
+    (v1, v2)
+    for v1, v2 in product(nodes, nodes)
+    if random() <= edge_probability and v1 > v2
+)
+edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
+data = {"nodes": nodes, "edges": edges}
+
+# 2. Track optimization experiment
+logging.getLogger("mlflow").setLevel(logging.CRITICAL)  # Can be set DEBUG
 
 try:
     experiment_name = f"opt_exp_{datetime.datetime.now().strftime('%Y_%m_%d')}"
@@ -85,22 +126,12 @@ try:
 except MlflowException:
     experiment_id = mlflow.get_experiment_by_name(name=experiment_name).experiment_id
 
-
 with mlflow.start_run(experiment_id=experiment_id):
-    vertex = set(range(vertex_count))
-    edges = set(
-        (v1, v2)
-        for v1, v2 in product(vertex, vertex)
-        if random() <= edge_probability and v1 > v2
-    )
-    edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
-    data = {"vertex": vertex, "edges": edges}
-    print("=" * 5, "Data", "=" * 5)
-    print(data)
-    print("=" * 14, "\n")
     opt_model = OptModel(model_builder=ColoringModelBuilder)
-    opt_model.fit(data, fit_callback)
-    opt_model.predict(data)
+    solution = opt_model.optimize(data, fit_callback)
+    show_graph(solution)
+
+    # Note: Above is replacement for opt_model.fit(data, fit_callback) and opt_model.predict(data)
     mlflow.log_param("objective_parts", opt_model.objective)
     mlflow.log_metric("gap", opt_model.fit_callback_data["mip_gap"])
     mlflow.log_metric("kpi", opt_model.fit_callback_data["objective_value"])
@@ -108,17 +139,33 @@ with mlflow.start_run(experiment_id=experiment_id):
     tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
     print(f"tracking_url_type_store: {tracking_url_type_store}")
 
-    # Model registry does not work with file store
+    # Register the model
     if tracking_url_type_store != "file":
-
-        # Register the model
         # There are other ways to use the Model Registry, which depends on the use case,
         # please refer to the doc for more information:
         # https://mlflow.org/docs/latest/model-registry.html#api-workflow
-        mlflow.sklearn.log_model(
+        model_info = mlflow.sklearn.log_model(
             opt_model, "opt_model", registered_model_name="OptModel"
         )
     else:
-        mlflow.sklearn.log_model(opt_model, "opt_model")
+        model_info = mlflow.sklearn.log_model(opt_model, "opt_model")
 
-        # exec(build_model_source)
+# 3. Load the registered model and make predictions
+
+logged_model_uri = model_info.model_uri
+print(f"logged_model_uri: {logged_model_uri}")
+
+# Load model as a PyFuncModel.
+loaded_model = opt_flow.pyfunc.load_model(logged_model_uri)
+# Note: the previous line is a replacement opt_flow.pyfunc.load_model
+
+# Data generation
+node_count = 6  # Notice this is different input data
+edge_probability = 0.5
+nodes = set(range(node_count))
+edges = set((v1, v2) for v1, v2 in product(nodes, nodes) if random() <= edge_probability and v1 > v2)
+edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
+data = {"nodes": nodes, "edges": edges}
+
+vars = loaded_model.optimize(data)
+print(f"Optimized Coloring: {vars}")

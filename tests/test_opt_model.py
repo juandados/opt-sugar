@@ -26,7 +26,7 @@ class ColoringModelBuilder(ModelBuilder):
             degrees[v1] += 1
             degrees[v2] += 1
         self.degree = max(degrees.items(), key=lambda x: x[1])[1]
-        color_keys = list(product(self.data["vertex"], range(self.degree)))
+        color_keys = list(product(self.data["nodes"], range(self.degree)))
         color = base_model.addVars(color_keys, vtype="B", name="color")
         max_color = base_model.addVar(lb=0, ub=self.degree, vtype="C", name="max_color")
         self.variables = {"color": color, "max_color": max_color}
@@ -35,13 +35,13 @@ class ColoringModelBuilder(ModelBuilder):
         color = self.variables["color"]
         for v1, c in color:
             # if color[v1, c] == 1 -> color[v2, c] == 0 for all v2 such that (v1, v2) or  belongs to E
-            for v2 in self.data["vertex"]:
+            for v2 in self.data["nodes"]:
                 if (v2, v1) in self.data["edges"] or (v1, v2) in self.data["edges"]:
                     base_model.addConstr(
                         color[v2, c] <= 1 - color[v1, c], name=f"color_{c}_{v1}_{v2}"
                     )
 
-        for v in self.data["vertex"]:
+        for v in self.data["nodes"]:
             base_model.addConstr(
                 gp.quicksum(color[v, c] for c in range(self.degree)) == 1,
                 name=f"every_node_has_color_{v}",
@@ -73,7 +73,7 @@ def five_vertex_data():
         if random() <= edge_probability and v1 > v2
     )
     edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
-    data = {"vertex": vertex, "edges": edges}
+    data = {"nodes": vertex, "edges": edges}
     return data
 
 
