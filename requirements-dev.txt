@@ -1,4 +1,4 @@
--r base.txt
+-r requirements.txt
 black==22.8.0
 Sphinx==5.2.3
 twine==4.0.1
@@ -8,3 +8,4 @@ matplotlib==3.6.1
 furo==2022.9.29
 pyvis==0.3.0
 .
+setuptools~=54.1.2
