@@ -95,6 +95,9 @@ class OptModel:  # (MultiOutputMixin, RegressorMixin, BaseEstimator):
             self.fit(data, callback=callback)
         return self.vars_
 
+    def optimize(self, data, callback=None):
+        return self.predict(data, callback=callback)
+
     def score(self):
         """Returns the spefic model objective given the data"""
         check_is_fitted(self)
