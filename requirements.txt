@@ -1,4 +1,4 @@
-numpy==1.23.2
+numpy==1.21.6
 gurobipy==9.5.2
 scikit-learn==1.1.2
 mlflow==1.29.0
