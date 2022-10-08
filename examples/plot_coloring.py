@@ -40,12 +40,6 @@ from numpy import linspace
 #  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
 
 # %%
-# Code blocks containing Jupyter magic are executable
-#     .. code-block:: python
-#
-#       %%matplotlib notebook
-
-# %%
 # A Colored Graph Helper Function
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
@@ -201,7 +195,11 @@ solution = loaded_model.optimize(data)
 print(f"Optimized Coloring: {solution}")
 
 g = build_graph(solution)
-g.show(name="vis.html")
+
+# %%
+# Code blocks containing Jupyter magic are executable
+# %%html
+# <embed type="text/html" src="vis.html" width="800" height="500">
 
 # %%
 # .. image:: https://mybinder.org/badge_logo.svg
