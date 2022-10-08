@@ -40,6 +40,12 @@ from numpy import linspace
 #  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
 
 # %%
+# Code blocks containing Jupyter magic are executable
+#     .. code-block:: python
+#
+#       %%matplotlib notebook
+
+# %%
 # A Colored Graph Helper Function
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
