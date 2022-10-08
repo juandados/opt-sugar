@@ -4,7 +4,6 @@ Sphinx==5.2.3
 twine==4.0.1
 pytest==7.1.3
 sphinx-gallery==0.11.1
-matplotlib==3.6.1
 furo==2022.9.29
 pyvis==0.3.0
 .

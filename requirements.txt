@@ -2,3 +2,5 @@ numpy==1.23.2
 gurobipy==9.5.2
 scikit-learn==1.1.2
 mlflow==1.29.0
+matplotlib==3.6.1
+opt-sugar==0.0.4.4
