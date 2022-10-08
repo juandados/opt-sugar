@@ -10,6 +10,10 @@ Welcome to opt-sugar's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   user_guide
+   auto_examples/index.rst
+   roadmap
+
 
 
 Indices and tables
