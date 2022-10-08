@@ -5,6 +5,9 @@ Experiment Tracking: Coloring
 
 This example demostrates how to use opt-sugar in combination with mlflow
 for single objective optimization experiment tracking
+
+.. image:: https://mybinder.org/badge_logo.svg
+ :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_coloring.ipynb
 """
 import datetime
 from urllib.parse import urlparse
@@ -37,7 +40,7 @@ from numpy import linspace
 #  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
 
 
-def graph(solution):
+def build_graph(solution):
     cmap = plt.get_cmap("gist_rainbow")
     color_count = int(solution["max_color"] + 1)
     color_map = {node: color_label for node, color_label in product(nodes, range(color_count)) if
@@ -49,6 +52,7 @@ def graph(solution):
     g.add_edges(edges)
     g.set_options("""{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}""")
     return g
+
 
 class ColoringModelBuilder(ModelBuilder):
     """This should be user implemented"""
@@ -127,7 +131,7 @@ except MlflowException:
 with mlflow.start_run(experiment_id=experiment_id):
     opt_model = OptModel(model_builder=ColoringModelBuilder)
     solution = opt_model.optimize(data, fit_callback)
-    g = graph(solution)
+    g = build_graph(solution)
     g.show(name="vis.html")
 
     # Note: Above is replacement for opt_model.fit(data, fit_callback) and opt_model.predict(data)
