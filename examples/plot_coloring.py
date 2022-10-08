@@ -131,8 +131,6 @@ except MlflowException:
 with mlflow.start_run(experiment_id=experiment_id):
     opt_model = OptModel(model_builder=ColoringModelBuilder)
     solution = opt_model.optimize(data, fit_callback)
-    g = build_graph(solution)
-    g.show(name="vis.html")
 
     # Note: Above is replacement for opt_model.fit(data, fit_callback) and opt_model.predict(data)
     mlflow.log_param("objective_parts", opt_model.objective)
@@ -170,5 +168,8 @@ edges = set((v1, v2) for v1, v2 in product(nodes, nodes) if random() <= edge_pro
 edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
 data = {"nodes": nodes, "edges": edges}
 
-vars = loaded_model.optimize(data)
-print(f"Optimized Coloring: {vars}")
+solution = loaded_model.optimize(data)
+print(f"Optimized Coloring: {solution}")
+
+g = build_graph(solution)
+g.show(name="vis.html")
