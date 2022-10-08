@@ -37,7 +37,7 @@ from numpy import linspace
 #  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
 
 
-def show_graph(solution):
+def graph(solution):
     cmap = plt.get_cmap("gist_rainbow")
     color_count = int(solution["max_color"] + 1)
     color_map = {node: color_label for node, color_label in product(nodes, range(color_count)) if
@@ -48,9 +48,7 @@ def show_graph(solution):
                 color=[rgb2hex(rgb_colors[color_label]) for color_label in color_map.values()])
     g.add_edges(edges)
     g.set_options("""{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}""")
-    filename = "vis.html"
-    g.show(name=filename)
-
+    return g
 
 class ColoringModelBuilder(ModelBuilder):
     """This should be user implemented"""
@@ -129,7 +127,8 @@ except MlflowException:
 with mlflow.start_run(experiment_id=experiment_id):
     opt_model = OptModel(model_builder=ColoringModelBuilder)
     solution = opt_model.optimize(data, fit_callback)
-    show_graph(solution)
+    g = graph(solution)
+    g.show(name="vis.html")
 
     # Note: Above is replacement for opt_model.fit(data, fit_callback) and opt_model.predict(data)
     mlflow.log_param("objective_parts", opt_model.objective)
