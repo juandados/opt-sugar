@@ -1,5 +1,13 @@
 .. _roadmap:
 
+.. |ss| raw:: html
+
+   <strike>
+
+.. |se| raw:: html
+
+   </strike>
+
 Roadmap
 =======
 
@@ -12,9 +20,9 @@ no way a promise that it will happen, as resources are limited. Rather, it
 is an indication that help is welcomed on this topic.
 
 
-General Goals
--------------
-#. Add an experiment tracking example gallery using mlflow.
+Backlog
+-------
+#. |ss| Add an experiment tracking example gallery. |se|
 
 #. Add hierarchical optimization capabilities
 
