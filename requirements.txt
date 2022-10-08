@@ -2,6 +2,7 @@ numpy==1.21.6
 gurobipy==9.5.2
 scikit-learn==1.0.2
 mlflow==1.29.0
-matplotlib==3.5.3
 opt-sugar==0.0.4.4
+# Examples dependencies
+matplotlib==3.5.3
 pyvis==0.3.0
