@@ -46,13 +46,21 @@ from numpy import linspace
 # The following function is really handy to visualize our colored graphs.
 
 
+def build_uncolored_graph(nodes, edges):
+    g = Network(notebook=True)
+    g.add_nodes(nodes=list(nodes))
+    g.add_edges(edges)
+    g.set_options("""{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}""")
+    return g
+
+
 def build_graph(solution):
     cmap = plt.get_cmap("gist_rainbow")
     color_count = int(solution["max_color"] + 1)
     color_map = {node: color_label for node, color_label in product(nodes, range(color_count)) if
                  solution[f'color[{node},{color_label}]'] == 1}
     rgb_colors = {c: cmap(x) for c, x in enumerate(linspace(0, 1 - 1 / color_count, color_count))}
-    g = Network()
+    g = Network(notebook=True)
     g.add_nodes(nodes=list(color_map.keys()),
                 color=[rgb2hex(rgb_colors[color_label]) for color_label in color_map.values()])
     g.add_edges(edges)
@@ -120,12 +128,10 @@ def fit_callback(model):
 
 
 # %%
-# Tracking an Optimization Experiment
+# Generate random data
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Add description here.
-
-# Generate random data:
 
 node_count = 5
 edge_probability = 0.5
@@ -138,6 +144,15 @@ edges = set(
 )
 edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
 data = {"nodes": nodes, "edges": edges}
+
+g = build_uncolored_graph(nodes, edges)
+g.show(name="vis.html")
+
+# %%
+# Tracking an Optimization Experiment
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Add description here.
 
 logging.getLogger("mlflow").setLevel(logging.CRITICAL)  # Can be set DEBUG
 
@@ -195,11 +210,7 @@ solution = loaded_model.optimize(data)
 print(f"Optimized Coloring: {solution}")
 
 g = build_graph(solution)
-
-# %%
-# Code blocks containing Jupyter magic are executable
-# %%html
-# <embed type="text/html" src="vis.html" width="800" height="500">
+g.show(name="vis.html")
 
 # %%
 # .. image:: https://mybinder.org/badge_logo.svg
