@@ -45,15 +45,6 @@ from numpy import linspace
 #
 # The following function is really handy to visualize our colored graphs.
 
-
-def build_uncolored_graph(nodes, edges):
-    g = Network(notebook=True)
-    g.add_nodes(nodes=list(nodes))
-    g.add_edges(edges)
-    g.set_options("""{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}""")
-    return g
-
-
 def build_graph(solution):
     cmap = plt.get_cmap("gist_rainbow")
     color_count = int(solution["max_color"] + 1)
@@ -144,9 +135,6 @@ edges = set(
 )
 edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
 data = {"nodes": nodes, "edges": edges}
-
-g = build_uncolored_graph(nodes, edges)
-g.show(name="vis.html")
 
 # %%
 # Tracking an Optimization Experiment
