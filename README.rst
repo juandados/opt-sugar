@@ -46,4 +46,4 @@ the easiest way to install opt-sugar is using ``pip``::
 
     pip install -U opt-sugar
 
-Read the docs [here](https://opt-sugar.readthedocs.io/en/latest/)
+Read the docs `here. <https://opt-sugar.readthedocs.io/en/latest/>`_
