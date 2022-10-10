@@ -1,11 +1,8 @@
-from sklearn.base import BaseEstimator, RegressorMixin
-from sklearn.base import MultiOutputMixin
-from sklearn.utils.validation import check_is_fitted
 from abc import abstractmethod
+import json
+from sklearn.utils.validation import check_is_fitted
 import gurobipy as gp
 from .objective import Objective, ObjectivePart, BaseObjective
-from copy import copy
-import json
 
 
 class ModelBuilder:
@@ -64,15 +61,15 @@ class OptModel:  # (MultiOutputMixin, RegressorMixin, BaseEstimator):
     fit_callback_data: dict
 
     def __init__(self, *, model_builder):
-        self.ModelBuilder = model_builder
+        self.model_builder = model_builder
         self.data = None
         self.objective = None
 
     def fit(self, data, callback=None):
-        self.data = data
         """Builds and optimize the specific the model given the data"""
+        self.data = data
         # TODO: add some checks over data here may be feasibility
-        model_builder = self.ModelBuilder(data)
+        model_builder = self.model_builder(data)
         model = model_builder.build()
         model.optimize()
 
@@ -89,7 +86,8 @@ class OptModel:  # (MultiOutputMixin, RegressorMixin, BaseEstimator):
         return self
 
     def predict(self, data, callback=None):
-        """Fits estimator if not fitted or self.data differs from data and returns the variable values"""
+        """Fits estimator if not fitted or self.data differs from data and returns the
+         variable values"""
         fitted = [v for v in vars(self) if v.endswith("_") and not v.startswith("__")]
         if not fitted or self.data != data:
             self.fit(data, callback=callback)

@@ -32,7 +32,7 @@ from numpy import linspace
 # When running locally
 # import sys
 # sys.path.append('~/opt/opt-sugar')
-# from src.opt_sugar import OptModel, ModelBuilder
+# from src.opt_sugar import OptModel, model_builder
 # from src.opt_sugar.objective import Objective, ObjectivePart, BaseObjective
 # import src.opt_sugar.opt_flow as opt_flow
 

@@ -6,9 +6,9 @@ def pretty_json_str(json_str):
     return json.dumps(json.loads(json_str.replace("'", '"')), indent=2, sort_keys=True)
 
 
-def is_jsonable(x):
+def is_jsonable(object_):
     try:
-        json.dumps(x)
+        json.dumps(object_)
         return True
     except (TypeError, OverflowError):
         return False
