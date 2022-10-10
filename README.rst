@@ -56,5 +56,6 @@ The following are the step to release to PyPIf:
 #. In GitHub create a tag with the same version as in the setup.py, then create a release using the tag you just created.
 #. Have a coffee, the `Upload Python Package` GitHub action will do the rest.
 
-.. Note:: It would be good idea to run `pip install -U -r requirements-dev.txt` in your dev environment to get the most
+.. Note::
+    It would be good idea to run `pip install -U -r requirements-dev.txt` in your dev environment to get the most
 updated version of the package.
