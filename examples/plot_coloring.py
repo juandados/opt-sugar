@@ -30,11 +30,11 @@ from matplotlib.colors import rgb2hex
 from numpy import linspace
 
 # When running locally
-#import sys
-#sys.path.append('~/opt/opt-sugar')
-#from src.opt_sugar import OptModel, ModelBuilder
-#from src.opt_sugar.objective import Objective, ObjectivePart, BaseObjective
-#import src.opt_sugar.opt_flow as opt_flow
+# import sys
+# sys.path.append('~/opt/opt-sugar')
+# from src.opt_sugar import OptModel, ModelBuilder
+# from src.opt_sugar.objective import Objective, ObjectivePart, BaseObjective
+# import src.opt_sugar.opt_flow as opt_flow
 
 # TODO: reformat this example similar to
 #  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
@@ -45,18 +45,29 @@ from numpy import linspace
 #
 # The following function is really handy to visualize our colored graphs.
 
+
 def build_graph(solution):
     cmap = plt.get_cmap("gist_rainbow")
     color_count = int(solution["max_color"] + 1)
-    color_map = {node: color_label for node, color_label in product(nodes, range(color_count)) if
-                 solution[f'color[{node},{color_label}]'] == 1}
-    rgb_colors = {c: cmap(x) for c, x in enumerate(linspace(0, 1 - 1 / color_count, color_count))}
+    color_map = {
+        node: color_label
+        for node, color_label in product(nodes, range(color_count))
+        if solution[f"color[{node},{color_label}]"] == 1
+    }
+    rgb_colors = {
+        c: cmap(x) for c, x in enumerate(linspace(0, 1 - 1 / color_count, color_count))
+    }
     g = Network(notebook=True)
-    g.add_nodes(nodes=list(color_map.keys()),
-                color=[rgb2hex(rgb_colors[color_label]) for color_label in color_map.values()])
+    g.add_nodes(
+        nodes=list(color_map.keys()),
+        color=[rgb2hex(rgb_colors[color_label]) for color_label in color_map.values()],
+    )
     g.add_edges(edges)
-    g.set_options("""{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}""")
+    g.set_options(
+        """{"edges": {"color": {"inherit": false}}, "physics":{"maxVelocity": 15}}"""
+    )
     return g
+
 
 # %%
 # The Optimizations Model Builder
@@ -190,7 +201,11 @@ loaded_model = opt_flow.pyfunc.load_model(logged_model_uri)
 node_count = 6  # Notice this is different input data
 edge_probability = 0.5
 nodes = set(range(node_count))
-edges = set((v1, v2) for v1, v2 in product(nodes, nodes) if random() <= edge_probability and v1 > v2)
+edges = set(
+    (v1, v2)
+    for v1, v2 in product(nodes, nodes)
+    if random() <= edge_probability and v1 > v2
+)
 edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
 data = {"nodes": nodes, "edges": edges}
 
