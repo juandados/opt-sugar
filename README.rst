@@ -47,3 +47,14 @@ the easiest way to install opt-sugar is using ``pip``::
     pip install -U opt-sugar
 
 Read the docs `here. <https://opt-sugar.readthedocs.io/en/latest/>`_
+
+For Contributors
+~~~~~~~~~~~~~~~~
+The following are the step to release to PyPIf:
+
+#. Update version in setup.py file and push changes to GitHub.
+#. In GitHub create a tag with the same version as in the setup.py, then create a release using the tag you just created.
+#. Have a coffee, the `Upload Python Package` GitHub action will do the rest.
+
+.. Note:: It would be good idea to run `pip install -U -r requirements-dev.txt` in your dev environment to get the most
+updated version of the package.
