@@ -1,4 +1,5 @@
 .. -*- mode: rst -*-
+
 |ReadTheDocs|_ |Pypi|_
 
 .. |PythonMinVersion| replace:: 3.8
@@ -7,7 +8,7 @@
 .. |ScikitLearn| replace:: 1.1.2
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/opt-sugar/badge/?version=latest
-.. _ReadTheDocs https://opt-sugar.readthedocs.io/en/latest/?badge=latest
+.. _ReadTheDocs: https://opt-sugar.readthedocs.io/en/latest/?badge=latest
 
 .. |PyPi| image:: https://img.shields.io/pypi/v/opt-sugar
 .. _PyPi: https://pypi.org/project/opt-sugar/
