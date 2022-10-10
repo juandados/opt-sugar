@@ -1,9 +1,16 @@
 .. -*- mode: rst -*-
+|ReadTheDocs| |Pypi|
 
 .. |PythonMinVersion| replace:: 3.8
 .. |NumPyMinVersion| replace:: 1.23.2
 .. |GurobiPyMinVersion| replace:: 9.5.2
 .. |ScikitLearn| replace:: 1.1.2
+
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/opt-sugar/badge/?version=latest
+.. _ReadTheDocs https://opt-sugar.readthedocs.io/en/latest/?badge=latest
+
+.. |PyPi| image:: https://img.shields.io/pypi/v/opt-sugar
+.. _PyPi: https://pypi.org/project/opt-sugar/
 
 **opt-sugar**
 is a Python package meant to make the optimization operation (OptOps) tasks easier by providing the building blocks needed
