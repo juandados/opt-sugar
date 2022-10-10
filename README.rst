@@ -13,7 +13,7 @@
 .. |PyPi| image:: https://img.shields.io/pypi/v/opt-sugar
 .. _PyPi: https://pypi.org/project/opt-sugar/
 
-.. |PythonVersion| image:: https://img.shields.io/badge/python-3.8-blue
+.. |PythonVersion| image:: https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-blue
 .. _PythonVersion: https://pypi.org/project/scikit-learn/
 
 .. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
