@@ -8,3 +8,4 @@ disable=
     fixme,
     protected-access,
     broad-except,
+    line-too-long,

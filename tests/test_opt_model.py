@@ -1,6 +1,8 @@
-import pytest
-from itertools import product
+from collections import defaultdict
 from random import random, seed
+from itertools import product
+import pytest
+import gurobipy as gp
 from src.opt_sugar import (
     OptModel,
     ModelBuilder,
@@ -8,8 +10,6 @@ from src.opt_sugar import (
     Objective,
     BaseObjective,
 )
-from collections import defaultdict
-import gurobipy as gp
 
 
 class ColoringModelBuilder(ModelBuilder):
@@ -22,9 +22,9 @@ class ColoringModelBuilder(ModelBuilder):
 
     def build_variables(self, base_model):
         degrees = defaultdict(int)
-        for v1, v2 in self.data["edges"]:
-            degrees[v1] += 1
-            degrees[v2] += 1
+        for node1, node2 in self.data["edges"]:
+            degrees[node1] += 1
+            degrees[node2] += 1
         self.degree = max(degrees.items(), key=lambda x: x[1])[1]
         color_keys = list(product(self.data["nodes"], range(self.degree)))
         color = base_model.addVars(color_keys, vtype="B", name="color")
@@ -33,24 +33,28 @@ class ColoringModelBuilder(ModelBuilder):
 
     def build_constraints(self, base_model):
         color = self.variables["color"]
-        for v1, c in color:
-            # if color[v1, c] == 1 -> color[v2, c] == 0 for all v2 such that (v1, v2) or  belongs to E
-            for v2 in self.data["nodes"]:
-                if (v2, v1) in self.data["edges"] or (v1, v2) in self.data["edges"]:
+        for node1, col in color:
+            # if color[v1, col] == 1 -> color[v2, col] == 0 for all v2 such that (v1, v2)
+            # or belongs to E
+            for node2 in self.data["nodes"]:
+                if (node2, node1) in self.data["edges"] or (node1, node2) in self.data[
+                    "edges"
+                ]:
                     base_model.addConstr(
-                        color[v2, c] <= 1 - color[v1, c], name=f"color_{c}_{v1}_{v2}"
+                        color[node2, col] <= 1 - color[node1, col],
+                        name=f"color_{col}_{node1}_{node2}",
                     )
 
-        for v in self.data["nodes"]:
+        for node in self.data["nodes"]:
             base_model.addConstr(
-                gp.quicksum(color[v, c] for c in range(self.degree)) == 1,
-                name=f"every_node_has_color_{v}",
+                gp.quicksum(color[node, col] for col in range(self.degree)) == 1,
+                name=f"every_node_has_color_{node}",
             )
 
         max_color = self.variables["max_color"]
-        for v, c in color:
+        for node, col in color:
             base_model.addConstr(
-                c * color[v, c] <= max_color, name=f"max_color_{v}_{c}"
+                col * color[node, col] <= max_color, name=f"max_color_{node}_{col}"
             )
 
     def build_objective(self, base_model):
@@ -62,33 +66,34 @@ class ColoringModelBuilder(ModelBuilder):
 
 
 @pytest.fixture
-def five_vertex_data():
-    vertex_count = 5
-    vertex = set(range(vertex_count))
+def five_node_data():
+    node_count = 5
+    nodes = set(range(node_count))
     edge_probability = 0.5
     seed(10)
     edges = set(
         (v1, v2)
-        for v1, v2 in product(vertex, vertex)
+        for v1, v2 in product(nodes, nodes)
         if random() <= edge_probability and v1 > v2
     )
     edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
-    data = {"nodes": vertex, "edges": edges}
+    data = {"nodes": nodes, "edges": edges}
     return data
 
 
+# pylint: disable=no-self-use, redefined-outer-name
 @pytest.mark.unit
 class TestOptModel:
-    def test_fit(self, five_vertex_data):
+    def test_fit(self, five_node_data):
         opt_model = OptModel(model_builder=ColoringModelBuilder)
-        opt_model.fit(five_vertex_data)
+        opt_model.fit(five_node_data)
         # color count is 2
         color_count = opt_model.objective_value_ + 1
         assert color_count == 2
 
-    def test_predict(self, five_vertex_data):
+    def test_predict(self, five_node_data):
         opt_model = OptModel(model_builder=ColoringModelBuilder)
-        vars_ = opt_model.predict(five_vertex_data)
+        vars_ = opt_model.predict(five_node_data)
         assert isinstance(vars_, dict)
         # color count is 2
         color_count = opt_model.objective_value_ + 1

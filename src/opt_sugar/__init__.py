@@ -87,7 +87,7 @@ class OptModel:  # (MultiOutputMixin, RegressorMixin, BaseEstimator):
 
     def predict(self, data, callback=None):
         """Fits estimator if not fitted or self.data differs from data and returns the
-         variable values"""
+        variable values"""
         fitted = [v for v in vars(self) if v.endswith("_") and not v.startswith("__")]
         if not fitted or self.data != data:
             self.fit(data, callback=callback)

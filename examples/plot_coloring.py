@@ -20,14 +20,14 @@ import gurobipy as gp
 import mlflow
 from mlflow.exceptions import MlflowException
 
-from opt_sugar import OptModel, ModelBuilder
-from opt_sugar.objective import Objective, ObjectivePart, BaseObjective
-import opt_sugar.opt_flow as opt_flow
-
 from pyvis.network import Network
 import matplotlib.pyplot as plt
 from matplotlib.colors import rgb2hex
 from numpy import linspace
+
+from opt_sugar import OptModel, ModelBuilder
+from opt_sugar.objective import Objective, ObjectivePart, BaseObjective
+from opt_sugar import opt_flow
 
 # When running locally
 # import sys
