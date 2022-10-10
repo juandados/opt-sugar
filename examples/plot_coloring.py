@@ -198,7 +198,7 @@ solution = loaded_model.optimize(data)
 print(f"Optimized Coloring: {solution}")
 
 g = build_graph(solution)
-g.show(name="vis.html")
+# g.show(name="vis.html")
 
 # %%
 # .. image:: https://mybinder.org/badge_logo.svg
