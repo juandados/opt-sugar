@@ -1,5 +1,5 @@
 .. -*- mode: rst -*-
-|ReadTheDocs| |Pypi|
+|ReadTheDocs|_ |Pypi|_
 
 .. |PythonMinVersion| replace:: 3.8
 .. |NumPyMinVersion| replace:: 1.23.2
