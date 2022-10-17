@@ -49,7 +49,7 @@ the easiest way to install opt-sugar is using ``pip``::
 Read the docs `here. <https://opt-sugar.readthedocs.io/en/latest/>`_
 
 For Contributors
-~~~~~~~~~~~~~~~~
+----------------
 The following are the step to release to PyPIf:
 
 #. Update version in setup.py file and push changes to GitHub.
