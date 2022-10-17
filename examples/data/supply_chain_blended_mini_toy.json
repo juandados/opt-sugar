@@ -1,0 +1,59 @@
+{
+  "demand": {
+    "customer_1": {
+      "date": 1,
+      "superman": 1,
+      "thor": 2
+    },
+    "customer_2": {
+      "date": 1,
+      "superman": 2,
+      "thor": 1
+    }
+  },
+  "production": {
+    "shorts": {
+      "1": 10,
+      "2": 10
+    },
+    "capes": {
+      "1": 10,
+      "2": 10
+    },
+    "helmets": {
+      "1": 10,
+      "2": 10
+    },
+    "hammers": {
+      "1": 10,
+      "2": 10
+    }
+  },
+  "initial_inventory": {
+    "shorts": 0,
+    "capes": 0,
+    "helmets": 0,
+    "hammers": 0
+  },
+  "inventory_capacity": {
+    "shorts": 20,
+    "capes": 20,
+    "helmets": 20,
+    "hammers": 20
+  },
+  "max_delay": 3,
+  "recipe": {
+    "superman": {
+      "shorts": 1,
+      "capes": 1,
+      "helmets": 0,
+      "hammers": 0
+    },
+    "thor": {
+      "shorts": 0,
+      "capes": 1,
+      "helmets": 1,
+      "hammers": 1
+    }
+  }
+}
