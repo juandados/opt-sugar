@@ -6,3 +6,4 @@ opt-sugar
 # Examples dependencies
 matplotlib==3.5.3
 pyvis==0.3.0
+grblogtools==2.0.0
