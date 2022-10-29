@@ -16,7 +16,6 @@ import mlflow
 from mlflow import MlflowException
 from itertools import product
 import datetime
-import pathlib
 import pandas as pd
 
 import gurobipy as gp
@@ -93,10 +92,11 @@ with mlflow.start_run(experiment_id=experiment_id):
 
         return m
 
-    base_path = pathlib.Path(".").absolute()
-    examples_path = base_path / "data"
+    examples_path = (
+        "https://raw.githubusercontent.com/juandados/opt-sugar/main/examples/data"
+    )
     data = (
-        pd.read_csv(examples_path / "sudoku_1.csv", header=None)
+        pd.read_csv(f"{examples_path}/sudoku_1.csv", header=None)
         .replace({np.NaN: None})
         .values
     )
@@ -119,10 +119,11 @@ print(f"logged_model_uri: {logged_model_uri}")
 # Load model as a PyFuncModel.
 loaded_model = opt_flow.pyfunc.load_model(logged_model_uri)
 
-base_path = pathlib.Path(".").absolute()
-examples_path = base_path / "data"
+examples_path = (
+    "https://raw.githubusercontent.com/juandados/opt-sugar/main/examples/data"
+)
 data = (
-    pd.read_csv(examples_path / "sudoku_2.csv", header=None)
+    pd.read_csv(f"{examples_path}/sudoku_2.csv", header=None)
     .replace({np.NaN: None})
     .values
 )
