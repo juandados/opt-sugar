@@ -50,11 +50,26 @@ Read the docs `here. <https://opt-sugar.readthedocs.io/en/latest/>`_
 
 For Contributors
 ----------------
-The following are the step to release to PyPIf:
+
+Releasing Package
+~~~~~~~~~~~~~~~~~
+
+To release the package to PyPI follow the next steps:
 
 #. Update version in setup.py file and push changes to GitHub.
 #. In GitHub create a tag with the same version as in the setup.py, then create a release using the tag you just created.
 #. Have a coffee, the `Upload Python Package` GitHub action will do the rest.
+
+Updating Examples
+~~~~~~~~~~~~~~~~~
+
+Once the examples run locally using the imports with local paths in the examples:
+
+#. Remove the sys.path.append lines in the examples (commenting them by now is okay)
+#. Release to PyPI
+#. Add opt-sugar in the requirements-dev.txt
+#. Generate the examples locally and push
+#. Checkout any changes in the main branch
 
 .. Note::
     It would be good idea to run `pip install -U -r requirements-dev.txt` in your dev environment to get the most
