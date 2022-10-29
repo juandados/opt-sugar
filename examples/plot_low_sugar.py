@@ -1,11 +1,22 @@
+"""
+=============================
+Low Sugar: A simple MIP
+=============================
+
+This example demostrates how to use the low-sugar in combination with mlflow
+for a very simple single objective MIP experiment tracking
+
+.. image:: https://mybinder.org/badge_logo.svg
+ :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_low_sugar.ipynb
+"""
 import gurobipy as gp
 import mlflow
 from mlflow import MlflowException
 import datetime
 
-# When running locally
-from src.opt_sugar.low_sugar import Model
-from src.opt_sugar.opt_flow import pyfunc
+import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+from opt_sugar import low_sugar
+from opt_sugar import opt_flow
 
 try:
     experiment_name = f"opt_exp_{datetime.datetime.now().strftime('%Y_%m_%d')}"
@@ -16,6 +27,9 @@ except MlflowException:
 with mlflow.start_run(experiment_id=experiment_id):
 
     def build(data):
+        # Not using data in this simple example:
+        del data
+
         # Create a new model
         m = gp.Model("mip1")
 
@@ -37,7 +51,7 @@ with mlflow.start_run(experiment_id=experiment_id):
 
         return m
 
-    opt_model = Model(build)
+    opt_model = low_sugar.Model(build)
     solution = opt_model.predict(data={})
     model_info = mlflow.sklearn.log_model(opt_model, "opt_model")
 
@@ -51,6 +65,10 @@ logged_model_uri = model_info.model_uri
 print(f"logged_model_uri: {logged_model_uri}")
 
 # Load model as a PyFuncModel.
-loaded_model = pyfunc.load_model(logged_model_uri)
+loaded_model = opt_flow.pyfunc.load_model(logged_model_uri)
 solution = loaded_model.optimize(data={})
 print(f"solution from the registered model {solution}")
+
+# %%
+# .. image:: https://mybinder.org/badge_logo.svg
+#  :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_low_sugar.ipynb

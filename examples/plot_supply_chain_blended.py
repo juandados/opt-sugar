@@ -9,27 +9,19 @@ for single objective optimization experiment tracking
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_coloring.ipynb
 """
-import datetime
 from itertools import product
 import logging
+import json
+import pathlib
+import datetime
 
-import gurobipy as gp
 import mlflow
 from mlflow.exceptions import MlflowException
 
-
-# from opt_sugar import OptModel, ModelBuilder
-# from opt_sugar.objective import Objective, ObjectivePart, BaseObjective
-# from opt_sugar import opt_flow
-import pathlib
-
-# When running locally
-import sys
-import json
-
-sys.path.append("~/opt/opt-sugar")
-from src.opt_sugar import OptModel, ModelBuilder
-from src.opt_sugar.objective import Objective, ObjectivePart, BaseObjective
+import gurobipy as gp
+import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+from opt_sugar.high_sugar import OptModel, ModelBuilder
+from opt_sugar.high_sugar.objective import Objective, ObjectivePart, BaseObjective
 
 
 class SupplyChainBlendedModelBuilder(ModelBuilder):
@@ -200,8 +192,6 @@ class SupplyChainBlendedModelBuilder(ModelBuilder):
                     name=f"demand_satisfaction_{customer}_{prod}_{accessory}_{day}",
                 )
 
-        return
-
     def build_objective(self, base_model):
         dispatch = self.variables["dispatch"]
         extra_production = self.variables["extra_production"]
@@ -245,10 +235,10 @@ except MlflowException:
     experiment_id = mlflow.get_experiment_by_name(name=experiment_name).experiment_id
 
 
-base_path = pathlib.Path(__file__)
+base_path = pathlib.Path('.')
 examples_path = base_path.parent / "data"
 
-with open(examples_path / "supply_chain_blended_mini_toy.json", "r") as file:
+with open(examples_path / "supply_chain_blended_mini_toy.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
 with mlflow.start_run(experiment_id=experiment_id):

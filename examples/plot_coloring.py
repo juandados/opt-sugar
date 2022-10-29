@@ -25,8 +25,9 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import rgb2hex
 from numpy import linspace
 
-from opt_sugar import OptModel, ModelBuilder
-from opt_sugar.objective import Objective, ObjectivePart, BaseObjective
+import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+from opt_sugar.high_sugar import OptModel, ModelBuilder
+from opt_sugar.high_sugar.objective import Objective, ObjectivePart, BaseObjective
 from opt_sugar import opt_flow
 
 # When running locally
@@ -171,7 +172,7 @@ with mlflow.start_run(experiment_id=experiment_id):
     for step, (gap, time) in enumerate(opt_model.log_results.progress('nodelog')[['Gap', 'Time']].values):
         mlflow.log_metric(f"gap", gap, step)
         mlflow.log_metric(f"time", time, step)
-    mlflow.log_metric("nodelog", opt_model.log_results.progress("nodelog"))
+    #mlflow.log_metric("nodelog", opt_model.log_results.progress("nodelog"))
 
     tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
     print(f"tracking_url_type_store: {tracking_url_type_store}")
