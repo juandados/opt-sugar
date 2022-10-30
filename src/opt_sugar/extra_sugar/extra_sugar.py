@@ -3,7 +3,7 @@ import json
 import grblogtools as glt
 from sklearn.utils.validation import check_is_fitted
 import gurobipy as gp
-from ..high_sugar import objective
+from . import objective
 import tempfile
 
 
@@ -32,8 +32,8 @@ class ModelBuilder:
             f"{type(self).__name__} should implement build_objective!"
         )
 
-    def build(self):
-        base_model = gp.Model("my_model")
+    def build(self, name="my_model"):
+        base_model = gp.Model(name)
         self.build_variables(base_model)
         base_model.update()
         self.build_constraints(base_model)
