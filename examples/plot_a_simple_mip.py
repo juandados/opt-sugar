@@ -1,14 +1,17 @@
 """
 =============================
-Low Sugar: A simple MIP
+A simple MIP
 =============================
+.. NOTE:: Example taken from `gurobi examples <https://assets.gurobi.com/pdfs/user-events/2017-frankfurt/Modeling-1.pdf>`.
 
 This example demostrates how to use the low-sugar in combination with mlflow
 for a very simple single objective MIP experiment tracking
 
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_low_sugar.ipynb
+
 """
+# sphinx_gallery_thumbnail_path = '_static/a_simple_mip.png'
 import gurobipy as gp
 import mlflow
 from mlflow import MlflowException
@@ -68,6 +71,7 @@ print(f"logged_model_uri: {logged_model_uri}")
 loaded_model = opt_flow.pyfunc.load_model(logged_model_uri)
 solution = loaded_model.optimize(data={})
 print(f"solution from the registered model {solution}")
+
 
 # %%
 # .. image:: https://mybinder.org/badge_logo.svg

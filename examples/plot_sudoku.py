@@ -1,6 +1,6 @@
 """
 ========================================
-Low Sugar: Solving Sudokus Like a Master
+Solving Sudokus Like a Master
 ========================================
 
 This example demostrates how to use the low-sugar in combination with mlflow
@@ -9,7 +9,7 @@ to solve sudoku puzzles.
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_sudoku.ipynb
 """
-
+# sphinx_gallery_thumbnail_path = '_static/sudoku.png'
 import numpy as np
 import sys
 import mlflow

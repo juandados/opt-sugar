@@ -35,7 +35,7 @@ extensions = [
 sphinx_gallery_conf = {
     "examples_dirs": "../../examples",  # path to your example scripts
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
-    #"filename_pattern": "plot_coloring.py",
+    #"filename_pattern": "plot_a_simple_mip.py",
     "ignore_pattern": "plot_coloring_extra_sugar.py",
 }
 

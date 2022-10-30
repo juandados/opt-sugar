@@ -68,7 +68,8 @@ Once the examples run locally using the imports with local paths in the examples
 #. Remove the sys.path.append lines in the examples (commenting them by now is okay)
 #. Release to PyPI
 #. Add opt-sugar in the requirements-dev.txt
-#. Generate the examples locally and push
+#. Remove the docs/source/auto_examples folder content
+#. Generate the examples locally and push to repo
 #. Checkout any changes in the main branch
 
 .. Note::

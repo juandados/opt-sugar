@@ -9,6 +9,7 @@ for single objective optimization experiment tracking
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_coloring.ipynb
 """
+# sphinx_gallery_thumbnail_path = '_static/coloring_experiment.png'
 import datetime
 from urllib.parse import urlparse
 from itertools import product
