@@ -184,7 +184,7 @@ data = {"nodes": nodes, "edges": edges}
 solution = loaded_model.optimize(data)
 print(f"Optimized Coloring: {solution}")
 
-g = get_graph_to_show(solution)
+g = get_graph_to_show(data, solution)
 # g.show(name="vis.html")
 
 # %%
