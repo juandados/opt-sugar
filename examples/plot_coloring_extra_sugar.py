@@ -13,26 +13,29 @@ import datetime
 from urllib.parse import urlparse
 from itertools import product
 from collections import defaultdict
+from random import random
 import logging
 
 import gurobipy as gp
 import mlflow
 from mlflow.exceptions import MlflowException
 
-import sys;
 
-sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+from opt_sugar.extra_sugar import OptModel, ModelBuilder
+from opt_sugar.extra_sugar.objective import Objective, ObjectivePart, BaseObjective
 from opt_sugar import opt_flow
-from opt_sugar import low_sugar
 
-# The following function helper is very handy to visualize our colored graphs.
-from utils.coloring import get_graph_to_show
-
-# The generate_graph_data generates random graphs given a graph size and an edge probability.
-from utils.coloring import generate_graph_data
 
 # TODO: reformat this example similar to
 #  https://github.com/scikit-learn/scikit-learn/blob/main/examples/calibration/plot_calibration_multiclass.py
+
+# %%
+# A Colored Graph Helper Function
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# The following function is really handy to visualize our colored graphs.
+from utils.coloring import get_graph_to_show
 
 
 # %%
@@ -42,12 +45,8 @@ from utils.coloring import generate_graph_data
 # The following class is the builder for the coloring problem.
 
 
-class ColoringModelBuilder:
-
-    def __init__(self, data):
-        self.data = data
-        self.degree = None
-        self.variables = None
+class ColoringModelBuilder(ModelBuilder):
+    """This should be user implemented"""
 
     def build_variables(self, base_model):
         degrees = defaultdict(int)
@@ -85,7 +84,37 @@ class ColoringModelBuilder:
 
     def build_objective(self, base_model):
         max_color = self.variables["max_color"]
-        base_model.setObjective(max_color, gp.GRB.MINIMIZE)
+        objective_parts = [ObjectivePart(weight=1, expr=max_color)]
+        objective = Objective([BaseObjective(objective_parts, hierarchy=1)])
+        base_model.setObjective(objective.build()[0], gp.GRB.MINIMIZE)
+        return objective
+
+
+def fit_callback(model):
+    fit_callback_data = {
+        "mip_gap": model.mip_gap,
+        "objective_value": model.getObjective().getValue(),
+    }
+    return fit_callback_data
+
+
+# %%
+# Generate random data
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Add description here.
+
+node_count = 16
+edge_probability = 0.5
+
+nodes = set(range(node_count))
+edges = set(
+    (v1, v2)
+    for v1, v2 in product(nodes, nodes)
+    if random() <= edge_probability and v1 > v2
+)
+edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
+data = {"nodes": nodes, "edges": edges}
 
 # %%
 # Tracking an Optimization Experiment
@@ -102,37 +131,16 @@ except MlflowException:
     experiment_id = mlflow.get_experiment_by_name(name=experiment_name).experiment_id
 
 with mlflow.start_run(experiment_id=experiment_id):
-    def build(data):
-        # Create a new model
-        m = gp.Model("coloring")
-        model_builder = ColoringModelBuilder(data)
-        model_builder.build_variables(m)
-        model_builder.build_constraints(m)
-        model_builder.build_objective(m)
-        # setting parameters
-        m.setParam('MIPFocus', 2)
-        return m
-
-    def callback(m):
-        objective = m.getObjective()
-        color_count = objective.getValue()
-        callback_result = {"color_count": color_count, "MIPFocus": m.getParamInfo('MIPFocus')[2], "RunTime": m.RunTime}
-        return callback_result
-
-    # Generating a graph instance
-    data = generate_graph_data(node_count=16, edge_probability=0.5)
-
-    # Building
-    opt_model = low_sugar.Model(build)
-    result = opt_model.optimize(data=data, callback=callback)
-    var_values = result["vars"]
-    g = get_graph_to_show(data, var_values)
-    # g.show(name="vis.html")
+    opt_model = OptModel(model_builder=ColoringModelBuilder)
+    solution = opt_model.optimize(data, fit_callback)
 
     # Note: Above is replacement for opt_model.fit(data, fit_callback) and opt_model.predict(data)
-    mlflow.log_param("MIPFocus", result["callback_result"]["MIPFocus"])
-    mlflow.log_param("RunTime", result["callback_result"]["RunTime"])
-    mlflow.log_metric("color_count", result["callback_result"]["color_count"])
+    mlflow.log_param("objective_parts", opt_model.objective)
+    mlflow.log_metric("kpi", opt_model.fit_callback_data["objective_value"])
+    for step, (gap, time) in enumerate(opt_model.log_results.progress('nodelog')[['Gap', 'Time']].values):
+        mlflow.log_metric(f"gap", gap, step)
+        mlflow.log_metric(f"time", time, step)
+    #mlflow.log_metric("nodelog", opt_model.log_results.progress("nodelog"))
 
     tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
     print(f"tracking_url_type_store: {tracking_url_type_store}")
@@ -159,14 +167,24 @@ print(f"logged_model_uri: {logged_model_uri}")
 
 # Load model as a PyFuncModel.
 loaded_model = opt_flow.pyfunc.load_model(logged_model_uri)
+# Note: the previous line is a replacement opt_flow.pyfunc.load_model
 
 # Data generation
-data = generate_graph_data(node_count=6, edge_probability=0.5)
+node_count = 6  # Notice this is different input data
+edge_probability = 0.5
+nodes = set(range(node_count))
+edges = set(
+    (v1, v2)
+    for v1, v2 in product(nodes, nodes)
+    if random() <= edge_probability and v1 > v2
+)
+edges.update([(1, 0)])  # Forcing the edge 1, 0 to avoid empty edges
+data = {"nodes": nodes, "edges": edges}
+
 solution = loaded_model.optimize(data)
 print(f"Optimized Coloring: {solution}")
 
-var_values = result["vars"]
-g = get_graph_to_show(data, var_values)
+g = get_graph_to_show(solution)
 # g.show(name="vis.html")
 
 # %%
