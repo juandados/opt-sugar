@@ -1,7 +1,7 @@
 """
-=============================
-Experiment Tracking: Coloring
-=============================
+===========================================
+Experiment Tracking: Coloring Multiple Runs
+===========================================
 
 This example demostrates how to use opt-sugar in combination with mlflow
 for single objective optimization experiment tracking
@@ -67,7 +67,7 @@ def callback(m):
 
 # %%
 # MIPFocus effect Over Runtime Case 1: Same data multiple runs
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Add description here.
 
@@ -100,7 +100,7 @@ for mip_focus, _ in product([0, 1, 2, 3], range(25)):
 
 # %%
 # MIPFocus effect Over Runtime Case 1: Different input data
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Add description here.
 

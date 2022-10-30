@@ -1,7 +1,7 @@
 """
-=============================
-Experiment Tracking: Coloring
-=============================
+==========================================
+Experiment Tracking: Coloring a Single Run
+==========================================
 
 This example demostrates how to use opt-sugar in combination with mlflow
 for single objective optimization experiment tracking
