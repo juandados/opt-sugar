@@ -2,7 +2,7 @@
 =============================
 A simple MIP
 =============================
-.. NOTE:: Example taken from `gurobi examples <https://assets.gurobi.com/pdfs/user-events/2017-frankfurt/Modeling-1.pdf>`.
+.. NOTE:: Example taken from `gurobi examples <https://assets.gurobi.com/pdfs/user-events/2017-frankfurt/Modeling-1.pdf>`_.
 
 This example demostrates how to use the low-sugar in combination with mlflow
 for a very simple single objective MIP experiment tracking
