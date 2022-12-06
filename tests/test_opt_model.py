@@ -3,7 +3,7 @@ from random import random, seed
 from itertools import product
 import pytest
 import gurobipy as gp
-from src.opt_sugar import (
+from src.opt_sugar.extra_sugar import (
     OptModel,
     ModelBuilder,
     ObjectivePart,
