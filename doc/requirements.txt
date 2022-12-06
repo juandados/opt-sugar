@@ -2,3 +2,4 @@
 Sphinx==5.2.3
 sphinx-gallery==0.11.1
 furo==2022.9.29
+opt-sugar
