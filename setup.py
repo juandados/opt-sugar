@@ -6,7 +6,7 @@ long_description = (this_directory / "README.rst").read_text()
 
 setup(
     name="opt_sugar",
-    version="0.0.4.6",
+    version="0.0.4.7",
     author="Juan Chacon",
     author_email="juandados@gmail.com",
     packages=find_packages("src"),
