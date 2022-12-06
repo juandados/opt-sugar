@@ -138,8 +138,8 @@ with mlflow.start_run(experiment_id=experiment_id):
     mlflow.log_param("objective_parts", opt_model.objective)
     mlflow.log_metric("kpi", opt_model.fit_callback_data["objective_value"])
     for step, (gap, time) in enumerate(opt_model.log_results.progress('nodelog')[['Gap', 'Time']].values):
-        mlflow.log_metric(f"gap", gap, step)
-        mlflow.log_metric(f"time", time, step)
+        mlflow.log_metric("gap", gap, step)
+        mlflow.log_metric("time", time, step)
     #mlflow.log_metric("nodelog", opt_model.log_results.progress("nodelog"))
 
     tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme

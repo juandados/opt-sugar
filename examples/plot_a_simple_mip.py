@@ -12,10 +12,10 @@ for a very simple single objective MIP experiment tracking
 
 """
 # sphinx_gallery_thumbnail_path = '_static/a_simple_mip.png'
+import datetime
 import gurobipy as gp
 import mlflow
 from mlflow import MlflowException
-import datetime
 
 # import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
 from opt_sugar import low_sugar

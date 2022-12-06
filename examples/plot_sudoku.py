@@ -10,17 +10,17 @@ to solve sudoku puzzles.
  :target: https://mybinder.org/v2/gh/juandados/opt-sugar/main?labpath=doc%2Fsource%2Fauto_examples%2Fplot_sudoku.ipynb
 """
 # sphinx_gallery_thumbnail_path = '_static/sudoku.png'
-import numpy as np
-import sys
-import mlflow
-from mlflow import MlflowException
 from itertools import product
 import datetime
+import numpy as np
+
+import mlflow
+from mlflow import MlflowException
 import pandas as pd
 
 import gurobipy as gp
 
-# sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
+# import sys; sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
 from opt_sugar import low_sugar
 from opt_sugar import opt_flow
 from utils.sudoku import show_sudoku

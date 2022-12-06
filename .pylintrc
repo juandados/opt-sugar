@@ -9,3 +9,4 @@ disable=
     protected-access,
     broad-except,
     line-too-long,
+    invalid-name,

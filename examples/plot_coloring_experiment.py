@@ -20,9 +20,7 @@ import gurobipy as gp
 import mlflow
 from mlflow.exceptions import MlflowException
 
-import sys;
-
-# sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+# import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
 from opt_sugar import low_sugar
 
 # The generate_graph_data generates random graphs given a graph size and an edge probability.

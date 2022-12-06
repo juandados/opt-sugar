@@ -21,8 +21,8 @@ to solve a simple supply chain problem.
 # Let's start by doing some useful imports.
 
 from itertools import product
-import gurobipy as gp
 from typing import Dict
+import gurobipy as gp
 
 
 # %%
@@ -229,19 +229,18 @@ def build(data: Dict) -> gp.Model:
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Add description here.
-import sys
 
-# sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
+# import sys; sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
 from opt_sugar import low_sugar
 
 # Setting the experiment
+import datetime
 import logging
 
 logging.getLogger("mlflow").setLevel(logging.CRITICAL)  # Can be set DEBUG
 
 import mlflow
 from mlflow import MlflowException
-import datetime
 
 experiment_name = f"superheros_blended_{datetime.datetime.now().strftime('%Y_%m_%d')}"
 try:
