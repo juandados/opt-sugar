@@ -17,7 +17,7 @@ import mlflow
 from mlflow import MlflowException
 import datetime
 
-import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+# import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
 from opt_sugar import low_sugar
 from opt_sugar import opt_flow
 

@@ -20,7 +20,7 @@ import pandas as pd
 
 import gurobipy as gp
 
-sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
+# sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
 from opt_sugar import low_sugar
 from opt_sugar import opt_flow
 from utils.sudoku import show_sudoku

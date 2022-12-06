@@ -1,6 +1,6 @@
 """
 =============================
-Experiment Tracking: Coloring
+Experiment Tracking: Coloring [IN PROGRESS!!!]
 =============================
 
 This example demostrates how to use opt-sugar in combination with mlflow
@@ -19,7 +19,7 @@ import mlflow
 from mlflow.exceptions import MlflowException
 
 import gurobipy as gp
-import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+# import sys; sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
 from opt_sugar.extra_sugar import OptModel, ModelBuilder
 from opt_sugar.extra_sugar.objective import Objective, ObjectivePart, BaseObjective
 

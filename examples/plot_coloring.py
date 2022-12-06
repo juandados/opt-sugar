@@ -22,7 +22,7 @@ from mlflow.exceptions import MlflowException
 
 import sys;
 
-sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
+# sys.path.append('/Users/Juan.ChaconLeon/opt/opt-sugar/src')  # when running locally
 from opt_sugar import opt_flow
 from opt_sugar import low_sugar
 

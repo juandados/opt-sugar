@@ -231,7 +231,7 @@ def build(data: Dict) -> gp.Model:
 # Add description here.
 import sys
 
-sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
+# sys.path.append("/Users/Juan.ChaconLeon/opt/opt-sugar/src")  # when running locally
 from opt_sugar import low_sugar
 
 # Setting the experiment
