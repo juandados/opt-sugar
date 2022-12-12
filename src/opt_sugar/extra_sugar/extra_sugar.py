@@ -72,8 +72,8 @@ class OptModel:
 
     def fit(self, data, callback=None, log_file=None):
         """Builds and optimize the specific the model given the data
-        Notice the model is not part of the class, so if we want to read attributes of the model it is needed the callback
-        The callback will be executed after model optimization.
+        Notice the model is not part of the class, so if we want to read attributes of the model
+        it is needed. The callback will be executed after model optimization.
         """
         self.data = data
         # TODO: add some checks over data here may be feasibility

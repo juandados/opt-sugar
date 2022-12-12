@@ -1,2 +1,2 @@
-from .extra_sugar import ModelBuilder, OptModel
-from .objective import ObjectivePart, BaseObjective, Objective
+from .extra_sugar import ModelBuilder, OptModel  # noqa: F401
+from .objective import ObjectivePart, BaseObjective, Objective  # noqa: F401

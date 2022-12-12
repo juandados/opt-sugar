@@ -1,1 +1,1 @@
-from . import pyfunc
+from . import pyfunc  # noqa: F401
